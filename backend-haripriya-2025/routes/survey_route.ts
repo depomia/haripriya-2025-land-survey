@@ -6,7 +6,8 @@ import {
   updateSurvey,
   deleteSurvey,
   addRemark,
-  assignSurvey
+  assignSurvey,
+  toggleApproval
 } from '../controllers/survey_controller';
 
 const surveyRouter = Router();
@@ -21,5 +22,6 @@ surveyRouter.delete('/:id', deleteSurvey);
 // New routes for specific operations
 surveyRouter.post('/:id/remarks', addRemark);
 surveyRouter.post('/:id/assign', assignSurvey);
+surveyRouter.post('/:id/toggle-approval', toggleApproval);
 
 export default surveyRouter;

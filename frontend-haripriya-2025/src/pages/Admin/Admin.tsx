@@ -111,7 +111,7 @@ const Admin = () => {
                             <th className="p-3 text-left">Status</th>
                             <th className="p-3 text-left">Assigned To</th>
                             <th className="p-3 text-left">Approved</th>
-                            <th className="p-3 text-left">Remarks</th>
+                            {/* <th className="p-3 text-left">Remarks</th> */}
                             <th className="p-3 text-left">Actions</th>
                           </tr>
                         </thead>
@@ -138,9 +138,9 @@ const Admin = () => {
                                   {survey.approved ? 'Yes' : 'No'}
                                 </span>
                               </td>
-                              <td className="p-3 text-blue-100">
+                              {/* <td className="p-3 text-blue-100">
                                 {survey.remarks?.length || 0}
-                              </td>
+                              </td> */}
                               <td className="p-3">
                                 <Button 
                                   variant="outline" 

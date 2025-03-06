@@ -6,7 +6,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Input } from "@/components/ui/input";
 import EmployeeNavBar from './EmployeeNavBar';
-import { MessageCircle, Eye } from 'lucide-react';
+import { MessageCircle, Eye, ToggleLeft, ToggleRight } from 'lucide-react';
 
 const EmployeeDashboard = () => {
   const [surveys, setSurveys] = useState([]);
@@ -67,6 +67,21 @@ const EmployeeDashboard = () => {
       }
     } catch (err) {
       setError('Failed to update status');
+    }
+  };
+
+  const toggleApproval = async (surveyId) => {
+    try {
+      const response = await fetch(`http://localhost:8080/api/survey/${surveyId}/toggle-approval`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' }
+      });
+      
+      if (response.ok) {
+        loadSurveys();
+      }
+    } catch (err) {
+      setError('Failed to toggle approval status');
     }
   };
 
@@ -184,7 +199,7 @@ const EmployeeDashboard = () => {
                             <th className="p-3 text-left text-blue-100">Type</th>
                             <th className="p-3 text-left text-blue-100">District</th>
                             <th className="p-3 text-left text-blue-100">Status</th>
-                            <th className="p-3 text-left text-blue-100">Approved</th>
+                            <th className="p-3 text-left text-blue-100">Approval</th>
                             <th className="p-3 text-left text-blue-100">Remarks</th>
                             <th className="p-3 text-left text-blue-100">Actions</th>
                           </tr>
@@ -202,9 +217,24 @@ const EmployeeDashboard = () => {
                                 </span>
                               </td>
                               <td className="p-3 text-blue-100">
-                                <span className={`px-2 py-1 rounded text-xs ${survey.approved ? 'bg-green-600' : 'bg-red-600'} text-white`}>
-                                  {survey.approved ? 'Yes' : 'No'}
-                                </span>
+                                <Button
+                                  variant="ghost"
+                                  size="sm"
+                                  onClick={() => toggleApproval(survey._id)}
+                                  className="flex items-center space-x-1 hover:bg-white/10"
+                                >
+                                  {survey.approved ? (
+                                    <>
+                                      <ToggleRight className="h-5 w-5 text-green-400" />
+                                      <span className="text-green-400">Approved</span>
+                                    </>
+                                  ) : (
+                                    <>
+                                      <ToggleLeft className="h-5 w-5 text-red-400" />
+                                      <span className="text-red-400">Not Approved</span>
+                                    </>
+                                  )}
+                                </Button>
                               </td>
                               <td className="p-3 text-blue-100">
                                 <div className="flex items-center space-x-1">
@@ -279,9 +309,29 @@ const EmployeeDashboard = () => {
                                   Survey #{survey.surveyNumber} - {survey.district}
                                 </p>
                               </div>
-                              <span className={`px-3 py-1 rounded text-xs ${getStatusColor(survey.status)}`}>
-                                {survey.status}
-                              </span>
+                              <div className="flex items-center space-x-3">
+                                <span className={`px-3 py-1 rounded text-xs ${getStatusColor(survey.status)}`}>
+                                  {survey.status}
+                                </span>
+                                <Button
+                                  variant="ghost"
+                                  size="sm"
+                                  onClick={() => toggleApproval(survey._id)}
+                                  className="flex items-center space-x-1 hover:bg-white/10"
+                                >
+                                  {survey.approved ? (
+                                    <>
+                                      <ToggleRight className="h-5 w-5 text-green-400" />
+                                      <span className="text-green-400 text-xs">Approved</span>
+                                    </>
+                                  ) : (
+                                    <>
+                                      <ToggleLeft className="h-5 w-5 text-red-400" />
+                                      <span className="text-red-400 text-xs">Not Approved</span>
+                                    </>
+                                  )}
+                                </Button>
+                              </div>
                             </div>
                             
                             <div className="space-y-4">

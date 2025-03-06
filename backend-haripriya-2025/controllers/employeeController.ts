@@ -108,11 +108,18 @@ export const getEmployeeById = async (req: Request, res: Response) => {
  */
 export const updateEmployee = async (req: Request, res: Response) => {
     try {
-        const { name, phone, department, designation, isActive } = req.body;
+        const { name, phone, department, designation, isActive, password } = req.body;
+
+        let updateFields: any = { name, phone, department, designation, isActive };
+
+        if (password) {
+            const hashedPassword = await bcrypt.hash(password, 10);
+            updateFields.password = hashedPassword;
+        }
 
         const updatedEmployee = await Employee.findByIdAndUpdate(
             req.params.id,
-            { name, phone, department, designation, isActive },
+            updateFields,
             { new: true }
         ).select("-password");
 

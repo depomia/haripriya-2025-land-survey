@@ -257,6 +257,8 @@ export const updateSurvey = async (req: Request, res: Response) => {
     }       
 };
 
+
+
 // Add a new remark to a survey
 export const addRemark = async (req: Request, res: Response) => {
     try {
@@ -316,6 +318,49 @@ export const addRemark = async (req: Request, res: Response) => {
         }
         
         res.status(200).send(survey);
+    } catch (error) {
+        res.status(500).send("Internal Server Error");
+    }
+};
+
+export const toggleApproval = async (req: Request, res: Response) => {
+    try {
+        const surveyId = req.params.id;
+        
+        const survey = await survey_model.findById(surveyId);
+        
+        if (!survey) {
+            return res.status(404).send("Survey not found");
+        }
+        
+        // Toggle the current approval status
+        const newApprovalStatus = !survey.approved;
+        
+        const updatedSurvey = await survey_model.findByIdAndUpdate(
+            surveyId,
+            { approved: newApprovalStatus },
+            { new: true }
+        );
+        
+        // Create notification for approval status change
+        try {
+            if (survey.userId) {
+                await createNotification(
+                    survey.userId.toString(),
+                    'User',
+                    survey._id.toString(),
+                    newApprovalStatus ? 'SURVEY_APPROVED' : 'SURVEY_UNAPPROVED',
+                    newApprovalStatus 
+                        ? `Your survey #${survey.surveyNumber} has been approved` 
+                        : `Your survey #${survey.surveyNumber} approval has been revoked`,
+                    {}
+                );
+            }
+        } catch (notificationError) {
+            console.error('Failed to create notification for approval change:', notificationError);
+        }
+        
+        res.status(200).send(updatedSurvey);
     } catch (error) {
         res.status(500).send("Internal Server Error");
     }
