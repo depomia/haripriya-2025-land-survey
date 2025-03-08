@@ -53,7 +53,7 @@ const EmployeeManagement = () => {
       const data = await response.json();
       setEmployees(data);
     } catch (err) {
-      setError(err.message || 'An error occurred while fetching employees');
+      // setError(err.message || 'An error occurred while fetching employees');
     } finally {
       setLoading(false);
     }
@@ -143,7 +143,7 @@ const EmployeeManagement = () => {
       setOpenAddDialog(false);
       resetForm();
     } catch (err) {
-      setError(err.message || 'An error occurred while adding employee');
+      // setError(err.message || 'An error occurred while adding employee');
     }
   };
 
@@ -156,7 +156,7 @@ const EmployeeManagement = () => {
     
     // Validate form
     if (!formData.name || !formData.email) {
-      setError('Name and email are required');
+      // setError('Name and email are required');
       return;
     }
     
@@ -194,7 +194,7 @@ const EmployeeManagement = () => {
       fetchEmployees();
       setOpenEditDialog(false);
     } catch (err) {
-      setError(err.message || 'An error occurred while updating employee');
+      // setError(err.message || 'An error occurred while updating employee');
     }
   };
 
@@ -222,7 +222,7 @@ const EmployeeManagement = () => {
       fetchEmployees();
       setOpenDeleteDialog(false);
     } catch (err) {
-      setError(err.message || 'An error occurred while deleting employee');
+      // setError(err.message || 'An error occurred while deleting employee');
     }
   };
 

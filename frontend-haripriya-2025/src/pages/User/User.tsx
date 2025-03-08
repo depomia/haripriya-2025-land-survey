@@ -71,10 +71,9 @@ const User = () => {
         });
         
         // Filter surveys to only show the current user's surveys
-        // This filtering ensures we get all surveys associated with the user
         const allSurveys = response.data;
         const filteredSurveys = allSurveys.filter(survey => 
-          survey.userId === userData._id || 
+          survey.userId === userData.id || // Changed from userData._id to userData.id
           survey.email === userData.email ||
           survey.phone === userData.phone
         );
@@ -88,7 +87,7 @@ const User = () => {
         setLoading(false);
         
         // Log for debugging purposes
-        console.log(`Found ${sortedSurveys.length} surveys for user ${userData.name} (ID: ${userData._id})`);
+        console.log(`Found ${sortedSurveys.length} surveys for user ${userData.name} (ID: ${userData.id})`);
       } catch (error) {
         console.error("There was an error fetching the surveys!", error);
         setError("Failed to load surveys. Please try again later.");
@@ -97,13 +96,13 @@ const User = () => {
     };
   
     // Only fetch if we have user data
-    if (userData._id || userData.email) {
+    if (userData.id || userData.email) {
       fetchSurveys();
     } else {
       setLoading(false);
       console.warn("Cannot fetch surveys: User data is missing");
     }
-  }, [userData._id, userData.email, userData.phone, token]);
+  }, [userData.id, userData.email, userData.phone, token]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -130,7 +129,7 @@ const User = () => {
       thaluk: "",
       surveyNumber: "",
       surveyType: "",
-      userId: userData._id || "",
+      userId: userData.id || "", // Changed from userData._id to userData.id
     });
     setIsSurveyModalVisible(true);
   };
